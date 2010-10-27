@@ -64,6 +64,7 @@ module PsychoStats
     has_many :data, :class_name => "PlayerData", :foreign_key => :plrid
 
     has_one :profile, :class_name => "Profile", :primary_key => :uniqueid, :foreign_key => :uniqueid
+    has_one :clan, :class_name => "Clan", :primary_key => :clanid, :foreign_key => :clanid
 
     has_many :sessions, :class_name => "Session", :foreign_key => :plrid
 
@@ -78,11 +79,21 @@ module PsychoStats
 
     def deaths; data.sum('deaths'); end
 
+    def self.search(id)
+      plrid = PlayerName.find_by_name(id)
+      plrid = WorldID.find_by_worldid(id) if plrid.nil?
+      plrid = PlayerIP.find_by_ipaddr(IPAddr.new(id).to_i) if plrid.nil?
+      plrid.player
+    rescue
+      nil
+    end
   end
 
   class Profile < ActiveRecord::Base
     set_table_name "plr_profile"
     set_primary_key :uniqueid
+
+    has_one :name_info, :class_name => "PlayerName", :primary_key => :name, :foreign_key => :name
 
     def country
       GeoIPCountryCode.find_by_cc(cc).cn
