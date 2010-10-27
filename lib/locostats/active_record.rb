@@ -260,4 +260,13 @@ module Config
 
 end
 
+module Parser
+
+class Errlog
+  set_table_name "errlog"
+  set_primary_key :id
+end
+
+end
+
 end
