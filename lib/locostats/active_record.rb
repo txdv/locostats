@@ -68,7 +68,7 @@ module PsychoStats
 
     has_many :sessions, :class_name => "Session", :foreign_key => :plrid
 
-    has_many :victims, :class_name => "Victinm", :foreign_key => :plrid
+    has_many :victims, :class_name => "Victim", :foreign_key => :plrid
     has_many :weapondata, :class_name => "PlayerWeapon", :foreign_key => :plrid
 
     has_many :bans, :class_name => "Ban", :foreign_key => :plrid
@@ -109,8 +109,8 @@ module PsychoStats
     has_one :map, :class_name => "Map", :primary_key => :mapid, :foreign_key => :mapid
   end
   
-  class Victims < ActiveRecord::Base
-    set_table_name "plr_session"
+  class Victim < ActiveRecord::Base
+    set_table_name "plr_victims"
     set_primary_key :dataid
 
   end
