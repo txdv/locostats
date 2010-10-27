@@ -213,6 +213,51 @@ module Config
     set_primary_key :id
   end
 
+  class Award
+    set_table_name "config_awards"
+    set_primary_key :id
+  end
+
+  class ClanTag
+    set_table_name "config_clantgs"
+    set_primary_key :id
+  end
+
+  class Event
+    set_table_name "config_events"
+    set_primary_key :id
+  end
+
+  class LogSoruces
+    set_table_name "config_logsources"
+    set_primary_key :id
+  end
+
+  class Overlays
+    set_table_name "config_logsources"
+    set_primary_key :id
+  end
+
+  class Bans
+    set_table_name "config_plrbans"
+    set_primary_key :id
+  end
+
+  class Bonuses
+    set_table_name "config_plrbonuses"
+    set_primary_key :id
+  end
+
+  class Servers
+    set_table_name "cnofig_config_servers"
+    set_primary_key :id
+  end
+
+  class Themes
+    set_primary_key :id
+    set_table_name "config_themes"
+  end
+
 end
 
 end
