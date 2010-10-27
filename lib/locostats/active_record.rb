@@ -23,6 +23,8 @@ module PsychoStats
     prefix_obj(self, val)
   end
 
+module GameStats
+
   class PlayerData < ActiveRecord::Base
     set_table_name "plr_data"
     set_primary_key :dataid
@@ -44,7 +46,7 @@ module PsychoStats
     belongs_to :player, :class_name => "Player", :foreign_key => :plrid
 
     def country
-      GeoIP.find(:first, :conditions => [ "start >= ? AND ? <= end", ipaddr, ipaddr ])
+      PsychoStats::Geo::IP.find(:first, :conditions => [ "start >= ? AND ? <= end", ipaddr, ipaddr ])
     end
   end
 
@@ -64,7 +66,7 @@ module PsychoStats
     has_many :worldids, :class_name => "WorldID", :foreign_key => :plrid
     has_many :data, :class_name => "PlayerData", :foreign_key => :plrid
 
-    has_one :profile, :class_name => "Profile", :primary_key => :uniqueid, :foreign_key => :uniqueid
+    has_one :profile, :class_name => "PsychoStats::Site::Profile", :primary_key => :uniqueid, :foreign_key => :uniqueid
     has_one :clan, :class_name => "Clan", :primary_key => :clanid, :foreign_key => :clanid
 
     has_many :sessions, :class_name => "Session", :foreign_key => :plrid
@@ -89,17 +91,6 @@ module PsychoStats
       plrid.player
     rescue
       nil
-    end
-  end
-
-  class Profile < ActiveRecord::Base
-    set_table_name "plr_profile"
-    set_primary_key :uniqueid
-
-    has_one :name_info, :class_name => "PlayerName", :primary_key => :name, :foreign_key => :name
-
-    def country
-      GeoIPCountryCode.find_by_cc(cc).cn
     end
   end
 
@@ -139,38 +130,11 @@ module PsychoStats
     set_table_name "clan"
     set_primary_key :clantag
     
-    has_one :profile, :class_name => "ClanProfile", :foreign_key => :clantag
-  end
-
-  class ClanProfile < ActiveRecord::Base
-    set_table_name "clan_profile"
-    set_primary_key :clantag
+    has_one :profile, :class_name => "PsychoStats::Site::ClanProfile", :foreign_key => :clantag
   end
 
   class Ban < ActiveRecord::Base
     set_table_name "plr_bans"
-  end
-
-  class ConfigVariable < ActiveRecord::Base
-    set_table_name "config"
-    set_primary_key :id
-  end
-
-  class GeoIP < ActiveRecord::Base
-    set_table_name "geoip_ip"
-    set_primary_key [:start, :end]
-
-    has_one :country_name, :class_name => "GeoIPCountryCode", :primary_key => :cc, :foreign_key => :cc
-
-    def name
-      country_name.cn
-    end
-
-  end
-
-  class GeoIPCountryCode < ActiveRecord::Base
-    set_table_name "geoip_cc"
-    set_primary_key :cc
   end
 
   class Map < ActiveRecord::Base
@@ -198,5 +162,57 @@ module PsychoStats
   class MapHourly < ActiveRecord::Base
     set_table_name "map_hourly"
   end
+
+end
+
+module Site
+
+  class Profile < ActiveRecord::Base
+    set_table_name "plr_profile"
+    set_primary_key :uniqueid
+
+    has_one :name_info, :class_name => "PlayerName", :primary_key => :name, :foreign_key => :name
+
+    def country
+      PsychoStats::Geo::CountryCode.find_by_cc(cc).cn
+    end
+  end
+
+  class ClanProfile < ActiveRecord::Base
+    set_table_name "clan_profile"
+    set_primary_key :clantag
+  end
+
+end
+
+module Geo
+
+  class IP < ActiveRecord::Base
+    set_table_name "geoip_ip"
+    set_primary_key [:start, :end]
+
+    has_one :country_name, :class_name => "CountryCode", :primary_key => :cc, :foreign_key => :cc
+
+    def name
+      country_name.cn
+    end
+
+  end
+
+  class CountryCode < ActiveRecord::Base
+    set_table_name "geoip_cc"
+    set_primary_key :cc
+  end
+
+end
+
+module Config
+
+  class Variable < ActiveRecord::Base
+    set_table_name "config"
+    set_primary_key :id
+  end
+
+end
 
 end
