@@ -71,6 +71,8 @@ module PsychoStats
     has_many :victims, :class_name => "Victinm", :foreign_key => :plrid
     has_many :weapondata, :class_name => "PlayerWeapon", :foreign_key => :plrid
 
+    has_many :bans, :class_name => "Ban", :foreign_key => :plrid
+
     def self.total_ranked
       self.find(:all, :select => "COUNT(*) AS total", :conditions => "allowrank = 1").first.total.to_i
     end
@@ -140,6 +142,10 @@ module PsychoStats
   class ClanProfile < ActiveRecord::Base
     set_table_name "clan_profile"
     set_primary_key :clantag
+  end
+
+  class Ban < ActiveRecord::Base
+    set_table_name "plr_bans"
   end
 
   class ConfigVariable < ActiveRecord::Base
