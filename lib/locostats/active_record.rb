@@ -2,24 +2,25 @@ require 'active_record'
 
 module PsychoStats
 
-  @table_names = nil
+  @table_names = {}
 
-  def self.prefix(pre)
-
-    if @table_names.nil?
-      @table_names = {}
-      constants.each do |const|
-        klass = const_get(const)
-        @table_names[const] = klass.table_name
+  def self.prefix_obj(object, val)
+    object.constants.each do |const|
+      klass = object.const_get(const)
+      if klass.is_a?(Class) and  klass.superclass == ActiveRecord::Base 
+        if @table_names[klass.hash].nil?
+          @table_names[klass.hash] = klass.table_name
+        end
+        klass.set_table_name val + @table_names[klass.hash]
+      elsif klass.is_a?(Module)
+        prefix_obj(klass, val)
       end
+      #@table_names[object.hash] = klass.table_name if klass.superclass == ActiveRecord::Base
     end
+  end
 
-    constants.each do |const|
-      klass = const_get(const)
-      if (klass.superclass == ActiveRecord::Base)
-        klass.set_table_name pre + @table_names[const]
-      end
-    end
+  def self.prefix(val)
+    prefix_obj(self, val)
   end
 
   class PlayerData < ActiveRecord::Base
