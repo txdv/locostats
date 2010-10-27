@@ -14,4 +14,5 @@ Gem::Specification.new do |spec|
   spec.files += Dir['lib/locostats/*']
 
   spec.has_rdoc = false
+  spec.add_dependency 'activerecord', '>= 3.0.0'
 end
