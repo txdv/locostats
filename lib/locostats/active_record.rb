@@ -164,4 +164,30 @@ module PsychoStats
     set_primary_key :cc
   end
 
+  class Map < ActiveRecord::Base
+    set_table_name "map"
+    set_primary_key :mapid
+
+    has_one :data, :class_name => "MapData", :foreign_key => :mapid
+    has_many :hourly, :class_name => "MapHourly", :foreign_key => :mapid
+
+  end
+
+  class MapData < ActiveRecord::Base
+    set_table_name "map_data"
+    set_primary_key :dataid
+
+    has_one :cstrike, :class_name => "MapDataCounterStrike", :foreign_key => :dataid
+    #has_many :hourly :class_name => "MapHourly", :foreign_key => :dataid
+  end
+
+  class MapDataCounterStrike < ActiveRecord::Base
+    set_table_name "map_data_halflife_cstrike"
+    set_primary_key :dataid
+  end
+
+  class MapHourly < ActiveRecord::Base
+    set_table_name "map_hourly"
+  end
+
 end
