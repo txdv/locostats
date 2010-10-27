@@ -91,6 +91,12 @@ module GameStats
     rescue
       nil
     end
+
+    def user
+      profile.user
+    rescue
+      nil
+    end
   end
 
   class Session < ActiveRecord::Base
@@ -170,6 +176,9 @@ module Site
     set_primary_key :uniqueid
 
     has_one :name_info, :class_name => "PlayerName", :primary_key => :name, :foreign_key => :name
+    has_one :user, :class_name => "User", :primary_key => :userid, :foreign_key => :userid
+    
+    has_one :player, :class_name =>"PsychoStats::GameStats::Player", :primary_key => :uniqueid, :foreign_key => :uniqueid
 
     def country
       PsychoStats::Geo::CountryCode.find_by_cc(cc).cn
@@ -191,6 +200,20 @@ module Site
   class WebSession < ActiveRecord::Base
     set_table_name "sessions"
     set_primary_key :session_id
+  end
+
+  class User < ActiveRecord::Base
+    set_table_name "user"
+    set_primary_key :userid
+
+    has_one :profile, :class_name => "Profile", :primary_key => :userid, :foreign_key => :userid
+
+    def player
+      profile.player
+    rescue
+      nil
+    end
+
   end
 
 end
