@@ -119,14 +119,14 @@ module PsychoStats
     set_table_name "plr_weapons"
     set_primary_key :dataid
 
-    has_one :weapon, :class_name => "Weapon", :foreign_key => :weaponid
+    has_one :weapon, :class_name => "Weapon", :primary_key => :weaponid, :foreign_key => :weaponid
   end
 
   class Weapon < ActiveRecord::Base
     set_table_name "weapon"
     set_primary_key :weaponid
 
-    has_many :dataset, :class_name => "WeaponData", :foreign_key => :weaponid
+    has_many :data, :class_name => "WeaponData", :foreign_key => :weaponid
   end
 
   class WeaponData < ActiveRecord::Base
