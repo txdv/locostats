@@ -41,6 +41,10 @@ module PsychoStats
     set_primary_key :plrid
 
     belongs_to :player, :class_name => "Player", :foreign_key => :plrid
+
+    def country
+      GeoIP.find(:first, :conditions => [ "start >= ? AND ? <= end", ipaddr, ipaddr ])
+    end
   end
 
   class PlayerName < ActiveRecord::Base
@@ -59,7 +63,7 @@ module PsychoStats
     has_many :worldids, :class_name => "WorldID", :foreign_key => :plrid
     has_many :data, :class_name => "PlayerData", :foreign_key => :plrid
 
-    has_one :profile, :class_name => "Profile", :foreign_key => :uniqueid
+    has_one :profile, :class_name => "Profile", :primary_key => :uniqueid, :foreign_key => :uniqueid
 
     has_many :sessions, :class_name => "Session", :foreign_key => :plrid
 
@@ -73,11 +77,16 @@ module PsychoStats
     def kills; data.sum('kills'); end
 
     def deaths; data.sum('deaths'); end
+
   end
 
   class Profile < ActiveRecord::Base
     set_table_name "plr_profile"
     set_primary_key :uniqueid
+
+    def country
+      GeoIPCountryCode.find_by_cc(cc).cn
+    end
   end
 
   class Session < ActiveRecord::Base
@@ -125,6 +134,23 @@ module PsychoStats
   class ConfigVariable < ActiveRecord::Base
     set_table_name "config"
     set_primary_key :id
+  end
+
+  class GeoIP < ActiveRecord::Base
+    set_table_name "geoip_ip"
+    set_primary_key [:start, :end]
+
+    has_one :country_name, :class_name => "GeoIPCountryCode", :primary_key => :cc, :foreign_key => :cc
+
+    def name
+      country_name.cn
+    end
+
+  end
+
+  class GeoIPCountryCode < ActiveRecord::Base
+    set_table_name "geoip_cc"
+    set_primary_key :cc
   end
 
 end
