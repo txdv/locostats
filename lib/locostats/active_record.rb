@@ -103,8 +103,10 @@ module PsychoStats
   end
 
   class Session < ActiveRecord::Base
-    set_table_name "plr_session"
+    set_table_name "plr_sessions"
     set_primary_key :dataid
+
+    has_one :map, :class_name => "Map", :primary_key => :mapid, :foreign_key => :mapid
   end
   
   class Victims < ActiveRecord::Base
