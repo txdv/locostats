@@ -15,7 +15,6 @@ module PsychoStats
       elsif klass.is_a?(Module)
         prefix_obj(klass, val)
       end
-      #@table_names[object.hash] = klass.table_name if klass.superclass == ActiveRecord::Base
     end
   end
 
@@ -151,7 +150,6 @@ module GameStats
     set_primary_key :dataid
 
     has_one :cstrike, :class_name => "MapDataCounterStrike", :foreign_key => :dataid
-    #has_many :hourly :class_name => "MapHourly", :foreign_key => :dataid
   end
 
   class MapDataCounterStrike < ActiveRecord::Base
