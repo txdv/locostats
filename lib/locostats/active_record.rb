@@ -183,6 +183,18 @@ module Site
     set_primary_key :clantag
   end
 
+  class SearchResult < ActiveRecord::Base
+    set_table_name "search_results"
+    set_primary_key :search_id
+
+    has_one :session, :class_name => "WebSession", :primary_key => :session_id, :foreign_key => :session_id
+  end
+
+  class WebSession < ActiveRecord::Base
+    set_table_name "sessions"
+    set_primary_key :session_id
+  end
+
 end
 
 module Geo
@@ -208,52 +220,52 @@ end
 
 module Config
 
-  class Variable < ActiveRecord::Base
+  class Variable < ActiveRecord::Base 
     set_table_name "config"
     set_primary_key :id
   end
 
-  class Award
+  class Award < ActiveRecord::Base
     set_table_name "config_awards"
     set_primary_key :id
   end
 
-  class ClanTag
+  class ClanTag < ActiveRecord::Base
     set_table_name "config_clantgs"
     set_primary_key :id
   end
 
-  class Event
+  class Event < ActiveRecord::Base
     set_table_name "config_events"
     set_primary_key :id
   end
 
-  class LogSoruces
+  class LogSoruces < ActiveRecord::Base
     set_table_name "config_logsources"
     set_primary_key :id
   end
 
-  class Overlays
+  class Overlays < ActiveRecord::Base
     set_table_name "config_logsources"
     set_primary_key :id
   end
 
-  class Bans
+  class Bans < ActiveRecord::Base
     set_table_name "config_plrbans"
     set_primary_key :id
   end
 
-  class Bonuses
+  class Bonuses < ActiveRecord::Base
     set_table_name "config_plrbonuses"
     set_primary_key :id
   end
 
-  class Servers
+  class Servers < ActiveRecord::Base
     set_table_name "cnofig_config_servers"
     set_primary_key :id
   end
 
-  class Themes
+  class Themes < ActiveRecord::Base
     set_primary_key :id
     set_table_name "config_themes"
   end
@@ -262,7 +274,7 @@ end
 
 module Parser
 
-class Errlog
+class Errlog < ActiveRecord::Base
   set_table_name "errlog"
   set_primary_key :id
 end
