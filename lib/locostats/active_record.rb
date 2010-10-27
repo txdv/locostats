@@ -253,13 +253,13 @@ module Config
     set_primary_key :id
   end
 
-  class Bonuses < ActiveRecord::Base
+  class Bonus < ActiveRecord::Base
     set_table_name "config_plrbonuses"
     set_primary_key :id
   end
 
-  class Servers < ActiveRecord::Base
-    set_table_name "cnofig_config_servers"
+  class Server < ActiveRecord::Base
+    set_table_name "config_servers"
     set_primary_key :id
   end
 
