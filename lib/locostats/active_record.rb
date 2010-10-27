@@ -69,7 +69,7 @@ module PsychoStats
     has_many :sessions, :class_name => "Session", :foreign_key => :plrid
 
     has_many :victims, :class_name => "Victim", :foreign_key => :plrid
-    has_many :weapondata, :class_name => "PlayerWeapon", :foreign_key => :plrid
+    has_many :weapons, :class_name => "PlayerWeapon", :foreign_key => :plrid
 
     has_many :bans, :class_name => "Ban", :foreign_key => :plrid
 
