@@ -33,13 +33,13 @@ module PsychoStats::Site
         end
       end
 
-    def self.load_file(file, overwrite = true)
+    def self.load_file(file, overwrite = false)
       f = File.open(file)
-      load(f.read)
+      load(f.read, overwrite)
       f.close
     end
 
-    def self.load(string_block, overwrite = true)
+    def self.load(string_block, overwrite = false)
       string_block.each_line do |line|
         if !(line =~ /(^;)/)
           if line =~ /\"(.+)\"\s+\"(|.+)\"\s+\"(.+)\"\s+\"(.+)\"/
@@ -56,10 +56,12 @@ module PsychoStats::Site
       user = player.user
       return if user.nil?
 
-      if user.auth or overwrite
+      if user.auth.nil? or overwrite
+        user.auth = player.uniqueid
         user.access = access
         user.flags = flags
         user.save!
+        puts "Loaded #{user.username}(#{player.uniqueid}) with \"#{access}\" \"#{flags}\""
       end
 
     end

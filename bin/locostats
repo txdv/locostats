@@ -46,9 +46,15 @@ namespace :amxmodx do
     PsychoStats::Site::Amxmodx::Migration.update
   end
 
-  desc "Load"
-  task :load, :file do |t, args|
-    PsychoStats::Site::Amxmodx::Migration.load_file(args[:file])
+  desc "Load users.ini into database and map to existing users"
+  task :load, :file, :overwrite do |t, args|
+    
+    if args[:overwrite] == "true"
+      overwrite = true
+    else
+      overwrite = false
+    end
+    PsychoStats::Site::Amxmodx::Migration.load_file(args[:file], overwrite)
   end
 
 end
