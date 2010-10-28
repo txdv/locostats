@@ -3,6 +3,7 @@ require 'active_record'
 module PsychoStats
 
   @table_names = {}
+  @prefix = ""
 
   def self.prefix_obj(object, val)
     object.constants.each do |const|
@@ -18,8 +19,13 @@ module PsychoStats
     end
   end
 
-  def self.prefix(val)
+  def self.prefix=(val)
     prefix_obj(self, val)
+    @prefix = val
+  end
+
+  def self.prefix
+    @prefix
   end
 
 module GameStats
