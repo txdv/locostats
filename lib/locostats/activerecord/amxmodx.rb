@@ -66,6 +66,12 @@ module PsychoStats::Site
 
     end
 
+    def self.export
+      User.find(:all).each do |user|
+        puts "\"#{user.auth}\" \"#{user.password}\" \"#{user.access}\" \"#{user.flags}\" ; #{user.username} #{user.profile.name}"
+      end
+    end
+
   end
 
   end

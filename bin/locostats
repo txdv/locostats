@@ -57,6 +57,12 @@ namespace :amxmodx do
     PsychoStats::Site::Amxmodx::Migration.load_file(args[:file], overwrite)
   end
 
+  desc "Export users.ini from database"
+  task :export, :file do |t, args|
+    PsychoStats::Site::Amxmodx::Migration.export
+    #(args[:file])
+  end
+
 end
 
 task :default do
