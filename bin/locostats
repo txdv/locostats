@@ -2,6 +2,7 @@
 
 require 'rake'
 require 'locostats/activerecord/irc'
+require 'locostats/activerecord/amxmodx'
 
 if !File.file?('config.rb')
   puts
@@ -24,6 +25,30 @@ namespace :irc do
   desc "Removes the column irc from PsychoStats::Site::Profile"
   task :down do
     PsychoStats::Site::Irc::Migration.down
+  end
+
+end
+
+namespace :amxmodx do
+
+  desc "Extends the PsychoStats::Site::User table with amxmodx admin fields"
+  task :up do
+    PsychoStats::Site::Amxmodx::Migration.up
+  end
+
+  desc "Removes the amxmodx admin columns from PsychoStats::Site::User"
+  task :down do
+    PsychoStats::Site::Amxmodx::Migration.down
+  end
+
+  desc "Updates the modified user table to contain the authnames of the PsychoStats tables"
+  task :update do
+    PsychoStats::Site::Amxmodx::Migration.update
+  end
+
+  desc "Load"
+  task :load, :file do |t, args|
+    PsychoStats::Site::Amxmodx::Migration.load_file(args[:file])
   end
 
 end
