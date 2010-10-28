@@ -59,8 +59,9 @@ namespace :amxmodx do
 
   desc "Export users.ini from database"
   task :export, :file do |t, args|
-    PsychoStats::Site::Amxmodx::Migration.export
-    #(args[:file])
+    file = STDOUT
+    file = File.open(args[:file], "w") if !args[:file].nil?
+    PsychoStats::Site::Amxmodx::Migration.export(file)
   end
 
 end
