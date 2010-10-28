@@ -12,6 +12,7 @@ module PsychoStats::Site
       def self.down
         remove_column PsychoStats::Site::Profile.table_name, :irc
       end
+    end
   end
 
 end
