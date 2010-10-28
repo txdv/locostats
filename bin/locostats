@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require 'rake'
+require 'locostats/activerecord/irc'
+
+if !File.file?('config.rb')
+  puts
+  puts "Ensure that there is a config.rb in the local directory"
+  puts
+  exit
+else
+  require './config.rb'
+end
+
+Rake.application.init('locostats')
+
+namespace :irc do
+
+  desc "Extends the PsychoStats::Site::Profile with an irc field which can hold a nickname of a player"
+  task :up do
+    PsychoStats::Site::Irc::Migration.up
+  end
+
+  desc "Removes the column irc from PsychoStats::Site::Profile"
+  task :down do
+    PsychoStats::Site::Irc::Migration.down
+  end
+
+end
+
+task :default do
+  puts
+  puts "Run with -T to get all actions"
+  puts
+end
+
+Rake.application.top_level
