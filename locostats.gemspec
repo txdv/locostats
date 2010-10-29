@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.files =  Dir['bin/*']
   spec.files += Dir['lib/*']
   spec.files += Dir['lib/locostats/*']
+  spec.files += Dir['lib/locostats/util/*']
   spec.files += Dir['lib/locostats/activerecord/*']
 
   spec.has_rdoc = false
