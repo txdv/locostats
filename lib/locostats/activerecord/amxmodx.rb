@@ -96,6 +96,18 @@ module PsychoStats::Site
       save!
     end
 
+    def access
+      self[:access] or ""
+    end
+
+    def flags
+      self[:flags] or ""
+    end
+
+    def auth
+      self[:auth] or ""
+    end
+
 
   end
 
