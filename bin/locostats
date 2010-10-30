@@ -80,9 +80,7 @@ namespace :psychodb do
 end
 
 task :default do
-  puts
-  puts "Run with -T to get all actions"
-  puts
+  verbose(false) { sh "locostats -sD" }
 end
 
 Rake.application.top_level
