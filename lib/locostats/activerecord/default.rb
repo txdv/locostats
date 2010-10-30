@@ -4,23 +4,27 @@ module PsychoStats
 
   @table_names = {}
   @prefix = ""
-
-  def self.prefix_obj(object, val)
-    object.constants.each do |const|
-      klass = object.const_get(const)
-      if klass.is_a?(Class) and  klass.superclass == ActiveRecord::Base 
-        if @table_names[klass.hash].nil?
-          @table_names[klass.hash] = klass.table_name
-        end
-        klass.set_table_name val + @table_names[klass.hash]
-      elsif klass.is_a?(Module)
-        prefix_obj(klass, val)
+  
+  # get's all classes from a module and it's submodules if the superclass is of a certain type
+  def self.all_classes(superclass, modul, accumulate = nil)
+    accumulate = [] if accumulate.nil?
+    modul.constants.each do |const|
+      const = modul.const_get(const)
+      if const.is_a?(Class) and const.superclass == superclass
+        accumulate.push const
+      elsif const.is_a?(Module)
+        all_classes(superclass, const, accumulate)
       end
     end
+    return accumulate
   end
 
   def self.prefix=(val)
-    prefix_obj(self, val)
+    all_classes(ActiveRecord::Base, PsychoStats).each do |klass|
+      # save the old names
+      @table_names[klass.hash] = klass.table_name if @table_names[klass.hash].nil?
+      klass.set_table_name val + @table_names[klass.hash]
+    end
     @prefix = val
   end
 
@@ -171,6 +175,7 @@ module GameStats
 
   class MapHourly < ActiveRecord::Base
     set_table_name "map_hourly"
+    set_primary_key :dataid
   end
 
 end
@@ -258,7 +263,7 @@ module Config
   end
 
   class ClanTag < ActiveRecord::Base
-    set_table_name "config_clantgs"
+    set_table_name "config_clantags"
     set_primary_key :id
   end
 
@@ -306,6 +311,44 @@ class Errlog < ActiveRecord::Base
   set_primary_key :id
 end
 
+end
+
+
+class UpdateKeys < ActiveRecord::Migration
+  def self.target_tables
+
+    ommit = [
+      PsychoStats::Geo::IP,
+      #PsychoStats::Geo::CountryCode,
+      #PsychoStats::Site::ClanProfile,
+      PsychoStats::Config::Themes,
+      PsychoStats::GameStats::Ban,
+      #PsychoStats::GameStats::Clan
+    ]
+    PsychoStats.all_classes(ActiveRecord::Base, PsychoStats).reject { |t| ommit.include?(t) }
+  end
+
+  def self.up
+    target_tables.each do |table|
+      primary = table.columns_hash[table.primary_key]
+      if !primary.nil? and primary.type == :integer
+        execute "ALTER TABLE `#{table.table_name}` MODIFY COLUMN `#{table.primary_key}` #{primary.sql_type} NOT NULL AUTO_INCREMENT"
+        max = table.maximum(table.primary_key)
+        max = 0 if max.nil?
+        max += 1
+        execute "ALTER TABLE `#{table.table_name}` AUTO_INCREMENT = #{max}"
+      end
+    end
+  end
+
+  def self.down
+    target_tables.each do |table|
+      primary = table.columns_hash[table.primary_key]
+      if !primary.nil? and primary.type == :integer
+        execute "ALTER TABLE `#{table.table_name}` MODIFY COLUMN `#{table.primary_key}` #{primary.sql_type} NOT NULL DEFAULT '0'"
+      end
+    end
+  end
 end
 
 end

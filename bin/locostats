@@ -66,6 +66,19 @@ namespace :amxmodx do
 
 end
 
+namespace :psychodb do
+  desc "Updates all the psychostats tables primary id keys with AUTO_INCREMENT and sets to AUTO_INCREMENT to max + 1"
+  task :increment_keys do
+    PsychoStats::UpdateKeys.up
+  end
+  
+  desc "Set's all psychostats tables back to the state without AUTO_INCREMENT in the primary keys"
+  task :default_keys do
+    PsychoStats::UpdateKeys.down
+  end
+
+end
+
 task :default do
   puts
   puts "Run with -T to get all actions"
