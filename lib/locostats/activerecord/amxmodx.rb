@@ -23,7 +23,7 @@ module PsychoStats::Site
         case uniqueid
         when :worldid
           users = User.find(:all).each do |user|
-            if user.auth.nil?
+            if user.auth.nil? and !user.player.nil?
               user.auth = user.player.uniqueid
               user.access = "z" # user, no admin
               user.flags = "c" # steamid
