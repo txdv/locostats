@@ -78,17 +78,17 @@ module PsychoStats::Site
 
   class User
     def access_add(argument)
-      access = access.add(argument)
+      self[:access] = access.add(argument)
     end
     def access_del(argument)
-      access = access.del(argument)
+      self[:access] = access.del(argument)
     end
     
     def flags_add(argument)
-      flags = flags.add(argument)
+      self[:flags] = flags.add(argument)
     end
     def flags_del(argument)
-      flags = flags.del(argument)
+      self[:flags] = flags.del(argument)
     end
 
     def access
