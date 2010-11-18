@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+
 require 'rake'
 require 'locostats/activerecord/irc'
 require 'locostats/activerecord/amxmodx'
