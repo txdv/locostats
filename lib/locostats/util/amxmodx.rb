@@ -94,5 +94,16 @@ class String
     (self.short_split - argument.short_split).join("")
   end
 
+  def has?(obj)
+    if obj.is_a?(Array)
+      return true if obj.size == 0
+      return obj.collect { |i| self.include?(i) }.uniq == [true]
+    elsif obj.is_a?(String)
+      return has?(obj.split(""))
+    else
+      return include?(obj)
+    end
+  end
+
 end
 
