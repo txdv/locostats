@@ -77,18 +77,18 @@ module PsychoStats::Site
   end
 
   class User
-    def access_add(flags)
-      access = (access.split("") + flags.split("")).uniq.join
+    def access_add(argument)
+      access = access.add(argument)
     end
-    def access_del(flags)
-      flags = flags.gsub(flags, "")
+    def access_del(argument)
+      access = access.del(argument)
     end
     
-    def flags_add(flags)
-      flags = (flags.split("") + cflags.split("")).uniq.join
+    def flags_add(argument)
+      flags = flags.add(argument)
     end
-    def flags_del(flags)
-      flags = flags.gsub(flags, "")
+    def flags_del(argument)
+      flags = flags.del(argument)
     end
 
     def access
