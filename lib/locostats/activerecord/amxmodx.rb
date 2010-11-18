@@ -55,8 +55,7 @@ module PsychoStats::Site
 
       user = player.user
       return if user.nil?
-
-      if user.auth.nil? or overwrite
+      if user.auth.nil? or user.auth == "" or overwrite
         user.auth = player.uniqueid
         user.access = access
         user.flags = flags
